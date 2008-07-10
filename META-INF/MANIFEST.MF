@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Headless Plug-in
+Bundle-SymbolicName: com.idega.app.eplatform.headless;singleton:=true
+Bundle-Version: 1.0.0
+Bundle-Activator: com.idega.app.eplatform.headless.Activator
+Bundle-Vendor: IDEGA
+Require-Bundle: org.eclipse.core.runtime
+Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Bundle-ActivationPolicy: lazy
