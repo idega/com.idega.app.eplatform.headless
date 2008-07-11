@@ -1,6 +1,5 @@
 package com.idega.app.eplatform.headless;
 
-import java.util.Iterator;
 import java.util.Map;
 
 import org.eclipse.equinox.app.IApplication;
@@ -18,19 +17,17 @@ public class MainRunner implements IApplication {
 		Map arguments = args.getArguments();
 		//String[] cmdArgs = (String[])args;
 		if(arguments == null || arguments.isEmpty()){
-			System.out.println("hello, world.");
+			System.out.println("Starting Eplatform");
 		}
 		else{
-			for (Iterator iterator = arguments.keySet().iterator(); iterator.hasNext();) {
-				Object key = iterator.next();
-				String sKey = key.toString();
-				String value = arguments.get(key).toString();
-				System.out.println("hello, "+sKey+"="+value);
-			}
+			System.out.println("Starting Eplatform with arguments:");
 			
-			//for(int i=0; i<cmdArgs.length;i++){
-			//	
-			//}
+			String[] cmdArgs = (String[]) arguments.get("application.args");
+			
+			for(int i=0; i<cmdArgs.length;i++){
+				String cmdArg = cmdArgs[i];
+				System.out.println("\t"+cmdArg);
+			}
 		}
 		String status = null;
 		while(run){
