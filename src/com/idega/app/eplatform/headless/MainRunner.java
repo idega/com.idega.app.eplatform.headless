@@ -6,6 +6,9 @@ import java.util.Map;
 import org.eclipse.equinox.app.IApplication;
 import org.eclipse.equinox.app.IApplicationContext;
 
+import com.idega.app.eplatform.appservermanager.AppserverManager;
+import com.idega.app.eplatform.appservermanager.AppservermanagerPlugin;
+
 
 public class MainRunner implements IApplication {
 
@@ -29,15 +32,27 @@ public class MainRunner implements IApplication {
 			//	
 			//}
 		}
-		//while(run){
-		//	int rugl=1;
-		//}
+		String status = null;
+		while(run){
+			String newStatus = getManager().getMainWebapp().getStatus();
+			if(status!=null){
+				if(!status.equals(newStatus)){
+					System.out.println("[Eplatform] : "+status);
+				}
+			}
+			status=newStatus;
+			Thread.sleep(1000);
+		}
 		return EXIT_OK;
 	}
 
 	public void stop() {
 		// TODO Auto-generated method stub
 		
+	}
+	
+	private AppserverManager getManager() {
+		return AppservermanagerPlugin.getPlugin().getManager();
 	}
 
 }

@@ -11,6 +11,7 @@
    </launcherArgs>
 
    <plugins>
+      <plugin id="com.idega.app.eplatform.appservermanager"/>
       <plugin id="com.idega.app.eplatform.headless"/>
       <plugin id="javax.servlet"/>
       <plugin id="org.eclipse.core.contenttype"/>
