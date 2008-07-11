@@ -1,0 +1,76 @@
+#!/bin/sh
+
+# -----------------------------------------------------------------------------
+# Start/Stop Script for the Equinox Service
+# Environment Variable Prequisites
+#
+#   EQUINOX_HOME    Point to the directory where Equninox is intalled
+#
+#   EQUINOX_USER    The user to run the process as
+#
+#   EQUINOX_CONF    Point to the directory where the Equninox Bootstrap
+#                   configuration is located
+#
+#   JAVA_HOME       Must point at your Java Development Kit installation.
+#
+#   JAVA_OPTS       (Optional) Java runtime options used when the "start",
+#                   "stop", or "run" command is executed.
+#
+# -----------------------------------------------------------------------------
+
+EQUINOX_CONF=/etc/equinox_bootstrap
+
+usage()
+{
+    echo "Usage: $0 {start|stop|status|restart}"
+    exit 1
+}
+[ $# -gt 0 ] || usage
+
+
+ACTION=$1
+shift
+ARGS="$*"
+
+if [ -r "$EQUINOX_CONF"/bootstrap.conf ]; then
+ . "$EQUINOX_CONF"/bootstrap.conf
+fi
+
+if [ -f /etc/rc.d/init.d/functions ]; then
+	. /etc/rc.d/init.d/functions
+	_RUNPROC="daemon --user $EQUINOX_USER"
+else
+	_RUNPROC="su - $EQUINOX_USER -c"
+fi
+
+
+CLASSPATH=$EQUINOX_HOME/bin/$EQUINOX_JAR:$EQUINOX_HOME/bin/equinoxServiceBootstrap.jar
+
+JAVA_OPTS="$JAVA_OPTS -Dequinox.bootstrap.admin.port=$ADMIN_PORT \
+	-Dosgi.instance.area=$INSTANCE_AREA \
+	-Dosgi.install.area=$INSTALL_AREA \
+	-Dosgi.configuration.area=$CONFIG_AREA"
+
+RUN_CMD="$JAVA_HOME/bin/java $JAVA_OPTS \
+    -classpath $CLASSPATH com.willcode4beer.service.equinox.Bootstrap "
+
+case "$ACTION" in
+  start)
+	$_RUNPROC "$RUN_CMD start $*" &
+	;;
+  stop)
+	$_RUNPROC "$RUN_CMD stop $*"
+	;;
+  status)
+	$_RUNPROC "$RUN_CMD status $*"
+	;;
+  restart)
+	$_RUNPROC "$RUN_CMD stop $*" 
+	$_RUNPROC "$RUN_CMD start $*" &
+	;;
+  *)
+	usage
+	;;
+esac
+
+exit 0
